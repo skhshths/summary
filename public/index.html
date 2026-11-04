@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Daily</title>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f5c63" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1 id="date">Today</h1>
+        <p class="place">Mamaroneck, NY</p>
+      </header>
+
+      <section id="weather" aria-live="polite">
+        <p class="note">Loading the forecast…</p>
+      </section>
+
+      <p id="error" class="error" role="alert" hidden></p>
+
+      <form id="code-form" class="code-form" hidden>
+        <label id="code-label" for="code"></label>
+        <div class="row">
+          <input id="code" type="password" required />
+          <button id="code-submit" type="submit"></button>
+        </div>
+        <p id="code-note" class="note"></p>
+      </form>
+
+      <div id="personal" hidden>
+        <section aria-labelledby="today-heading">
+          <h2 id="today-heading">Your day</h2>
+          <ul id="schedule" class="schedule"></ul>
+        </section>
+
+        <section aria-labelledby="todo-heading">
+          <h2 id="todo-heading">To do</h2>
+          <ul id="todo" class="todo"></ul>
+          <p id="todo-empty" class="note" hidden>Nothing to do today.</p>
+        </section>
+
+        <section class="seen" aria-label="Streak">
+          <div class="streak">
+            <span id="streak-count" class="streak-count">0</span>
+            <span id="streak-label" class="streak-label">day streak</span>
+            <span id="streak-note" class="streak-note"></span>
+          </div>
+          <button id="seen" class="seen-button" type="button">Seen</button>
+        </section>
+
+        <details id="reminders-panel" class="panel">
+          <summary>Reminders</summary>
+          <form id="reminder-form" class="reminder-form">
+            <div class="field">
+              <label for="reminder-title">Remind me to</label>
+              <input id="reminder-title" maxlength="120" placeholder="Pack cleats" required />
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="reminder-repeat">When</label>
+                <select id="reminder-repeat">
+                  <option value="once">One day</option>
+                  <option value="daily">Every day</option>
+                  <option value="weekly">Certain days</option>
+                </select>
+              </div>
+              <div class="field" id="reminder-date-field">
+                <label for="reminder-date">Date</label>
+                <input id="reminder-date" type="date" />
+              </div>
+              <div class="field">
+                <label for="reminder-time">Time (optional)</label>
+                <input id="reminder-time" type="time" />
+              </div>
+            </div>
+            <div class="field" id="reminder-days-field" hidden>
+              <span id="reminder-days-label" class="field-label">On</span>
+              <div id="reminder-days" class="weekdays" role="group" aria-labelledby="reminder-days-label"></div>
+            </div>
+            <div class="field" id="reminder-activity-field" hidden>
+              <label for="reminder-activity">Only on days with</label>
+              <select id="reminder-activity"></select>
+            </div>
+            <button class="primary-button" type="submit">Add reminder</button>
+            <p class="note">With no time set, the notification comes at 7 AM.</p>
+          </form>
+
+          <h3 class="settings-label">Your reminders</h3>
+          <ul id="reminder-list" class="reminder-list"></ul>
+          <p id="reminder-list-empty" class="note" hidden>None yet.</p>
+
+          <h3 class="settings-label">Notifications on this device</h3>
+          <p id="push-status" class="note"></p>
+          <div class="button-row">
+            <button id="push-toggle" class="outline-button" type="button"></button>
+            <button id="push-test" class="outline-button" type="button" hidden>Send a test</button>
+          </div>
+        </details>
+
+        <details id="days-off" class="panel">
+          <summary>Days off</summary>
+          <div id="activity-tabs" class="tabs" role="group" aria-label="Activity"></div>
+          <div class="calendar-nav">
+            <button id="prev-month" type="button" aria-label="Previous month">‹</button>
+            <h3 id="month-label"></h3>
+            <button id="next-month" type="button" aria-label="Next month">›</button>
+          </div>
+          <div id="calendar" class="calendar"></div>
+          <p id="calendar-hint" class="note"></p>
+
+          <h3 id="weekdays-label" class="settings-label"></h3>
+          <div id="weekdays" class="weekdays" role="group" aria-labelledby="weekdays-label"></div>
+          <button id="remove-activity" class="link-button" type="button"></button>
+
+          <form id="add-activity" class="add-activity">
+            <label for="activity-name">Add something else to track</label>
+            <div class="row">
+              <input id="activity-name" maxlength="30" placeholder="Tutoring" required />
+              <button type="submit">Add</button>
+            </div>
+          </form>
+        </details>
+      </div>
+
+      <footer>
+        Weather by <a href="https://open-meteo.com/">Open-Meteo</a>
+      </footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+// Cloudflare Workers deploy: serves public/ as static files and runs
+// worker/index.js for /api/* and the reminder schedule.
+{
+  "name": "daily",
+  "main": "worker/index.js",
+  "compatibility_date": "2025-09-01",
+  // keep variables set in the Cloudflare dashboard (like RECOVERY_CODE) when a
+  // deploy runs, instead of resetting them to what's in this file
+  "keep_vars": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  // creates the DNS record and certificate for the subdomain on deploy
+  "routes": [{ "pattern": "daily.oliverbar.net", "custom_domain": true }],
+  // checks for reminders to send, so they can be up to 5 minutes late
+  "triggers": { "crons": ["*/5 * * * *"] },
+  // everything personal lives in one SQLite-backed Durable Object
+  "durable_objects": {
+    "bindings": [{ "name": "STORE", "class_name": "DailyStore" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["DailyStore"] }]
+}
