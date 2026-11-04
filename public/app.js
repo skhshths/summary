@@ -231,7 +231,6 @@ function showCodeForm(setup) {
     ? "Create a passcode to keep your schedule and reminders private"
     : "Enter your passcode";
   $("code-submit").textContent = setup ? "Create" : "Unlock";
-  $("code-note").textContent = setup ? "At least 6 characters. Each device asks for it once." : "";
   $("code").minLength = setup ? 6 : 0;
   $("code").autocomplete = setup ? "new-password" : "current-password";
 }
@@ -426,9 +425,8 @@ async function renderPush() {
   test.hidden = !subscription;
   $("push-status").textContent = blocked
     ? "Notifications are blocked. Allow them for this site in your browser's settings."
-    : subscription
-      ? "On. Reminders can arrive up to 5 minutes after their time."
-      : "Off. Reminders only show on this page until you turn these on.";
+    : "";
+  $("push-status").hidden = !blocked;
 }
 
 async function togglePush() {
@@ -503,12 +501,7 @@ function renderSchedule(weekday) {
 
 function renderStreak() {
   $("streak-count").textContent = state.current;
-  let note;
-  if (state.seenToday) note = `Back tomorrow. Best: ${state.best}`;
-  else if (state.current > 0) note = `Tap Seen to keep it going. Best: ${state.best}`;
-  else if (state.best > 0) note = `Tap Seen to start again. Best: ${state.best}`;
-  else note = "Tap Seen to start your streak";
-  $("streak-note").textContent = note;
+  $("streak-note").textContent = state.best > 0 ? `Best: ${state.best}` : "";
 
   const button = $("seen");
   button.disabled = state.seenToday;
@@ -531,14 +524,13 @@ function renderDaysOff() {
   );
 
   const hasSelection = Boolean(selected);
-  for (const id of ["weekdays-label", "weekdays", "remove-activity", "calendar-hint"]) {
+  for (const id of ["weekdays-label", "weekdays", "remove-activity"]) {
     $(id).hidden = !hasSelection;
   }
   renderCalendar(selected);
   if (!selected) return;
 
   const lower = selected.name.toLowerCase();
-  $("calendar-hint").textContent = `Tap a day to mark it as no ${lower}. Tap again to undo.`;
   $("weekdays-label").textContent = `${selected.name} normally happens on`;
   $("remove-activity").textContent = `Stop tracking ${lower}`;
   $("weekdays").replaceChildren(
